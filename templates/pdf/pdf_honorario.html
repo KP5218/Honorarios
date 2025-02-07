@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquidación de Prestaciones</title>
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            font-size: 12px;
+            margin: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .info-table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .info-table td {
+            padding: 5px;
+        }
+        .table-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .styled-table th, .styled-table td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        .styled-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
+        }
+        .totals {
+            font-weight: bold;
+            font-size: 12px;
+            text-align: right;
+            margin-top: 10px;
+        }
+        .summary-box {
+            border: 2px solid black;
+            width: 30%;
+            padding: 10px;
+            margin: 20px 0;
+            font-size: 12px;
+            text-align: center;
+        }
+        .footer {
+            font-weight: bold;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Liquidación Prestaciones</div>
+        <table class="info-table">
+            <tr>
+                <td><strong>Nombre:</strong> {{ nombre }}</td>
+                <td><strong>LIQUIDACIÓN {{ periodo.periodo }}</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Rut:</strong> {{ rut }}</td>
+                <td><strong>Desde {{ fecha_periodo_desde }} AL {{ fecha_periodo_hasta }}</strong></td>
+            </tr>
+        </table>
+
+        <div class="header">Detalle de Prestaciones Médicas</div>
+        <div class="table-container">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>N° BONO/OP</th>
+                        <th>NOMBRE PACIENTE</th>
+                        <th>$ M.BRUTO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resultado in datos %}
+                        {% for data in resultado %}
+                            <tr>
+                                <td>{{ data.fecha_creacion }}</td>
+                                <td>{{ data.op }}</td>
+                                <td>{{ data.nombre_paciente }}</td>
+                                <td>{{ data.valor }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    <tr class="totals">
+                        <td colspan="3">Totales</td>
+                        <td>{{ resultado_total_liquidar_formato }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary-box">
+            <strong>Resumen</strong>
+            <br>Monto Bruto: ${{ resultado_total_liquidar_formato }}
+        </div>
+
+        <div class="footer">
+            Para cualquier consulta, favor contactarse con RRHH al correo oficina@gmail.com
+            <br><br>
+            ENVIAR FACTURA O BOLETA AL CORREO correa.kro@gmail.com
+        </div>
+    </div>
+</body>
+</html>

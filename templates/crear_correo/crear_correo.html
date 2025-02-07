@@ -1,0 +1,72 @@
+{% extends 'global/layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid bg-light d-flex justify-content-center align-items-center" style="min-height: 80vh; margin-top:-80px;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-6">
+            <div class="card shadow-lg rounded-4 border-0 p-4">
+                <div class="card-header bg-secondary text-white text-center py-3 rounded-4">
+                    <h4 class="card-title m-0">Creación de Correo</h4>
+                </div>
+
+                {% if messages %}
+                    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} alert-dismissible fade show shadow" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'insertar_correo' %}" class="p-3">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="rut" class="form-label fw-bold text-dark">Rut Médico</label>
+                                    <input type="text" class="form-control border-dark" id="rut" name="rut" maxlength="10" onkeypress="return isNumber(event)" oninput="checkRut(this)" required>
+                                    <div id="alerta" class="mt-1">
+                                        <span id="mensaje" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="nombre" class="form-label fw-bold text-dark">Nombre Médico</label>
+                                    <input type="text" class="form-control border-dark" id="nombre" name="nombre" maxlength="200" required>
+                                </div>
+                            </div>
+                        </div>
+
+                          <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="correo" class="form-label fw-bold text-dark">Correo</label>
+                                    <input type="email" class="form-control border-dark" id="correo" name="correo" maxlength="150" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-2" id="correo_secundario" name="correo_secundario" style="transform: scale(1.3);">
+                                <label class="form-check-label fw-bold text-dark" for="correo_secundario" style="font-size: 1.1em;">Correo Secundario</label>
+                            </div>
+                        </div>
+
+
+
+                        <div class="text-center mb-3 mt-2">
+                            <button type="submit" class="btn btn-secondary px-4 py-2" id="crear">Crear Correo</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/crear_correo/validador_rut.js' %}"></script>
+{% endblock %}

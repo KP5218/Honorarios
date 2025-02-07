@@ -1,0 +1,91 @@
+{% extends 'global/layout.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container-fluid bg-light d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-lg rounded-4 border-0 p-3 w-100">
+                <div class="card-header bg-secondary text-white text-center py-3 rounded-4">
+                    <h4 class="card-title m-0">Lista y descarga de honorarios</h4>
+                </div>
+
+                <form id="formulario_datos" method="post" action="{% url 'form_busqueda_datos' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="form-label fw-bold text-dark">Fecha ingreso de datos</label>
+                                <input name="fecha_creacion" id="fecha_creacion" class="form-control" type="date">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label fw-bold text-dark">RUT</label>
+                                <input name="rut_medico" id="rut_medico" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" id="buscar" class="btn btn-secondary">Buscar</button>
+                        </div>
+                    </div>
+                </form>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div style="position: fixed; top: 50px; right: 100px; width: 300px; z-index: 9999;" class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if datos_visualizacion %}
+                <form id="formulario" method="post" action="{% url 'descargar_pdf' %}" target="_blank">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div style="max-height: 300px; overflow-y: auto;">
+                            <table id="tablaDatos" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Id transacción</th>
+                                        <th>RUT</th>
+                                        <th>Nombre</th>
+                                        <th>Valor Total</th>
+                                        <th>Descuento Total</th>
+                                        <th>Total a Liquidar</th>
+                                        <th>Seleccionar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for registro in datos_visualizacion %}
+                                        <tr>
+                                            <td>{{ registro.id_transaccion }}</td>
+                                            <td>{{ registro.rut }}</td>
+                                            <td>{{ registro.nombre }}</td>
+                                            <td>{{ registro.Valor_total }}</td>
+                                            <td>{{ registro.Descuento_total }}</td>
+                                            <td>{{ registro.Total_liquidar }}</td>
+                                            <td><input type="checkbox" name="registro" class="registro-checkbox" style="transform: scale(1.3);" value="{{ registro.rut }},{{ registro.id_transaccion }}"></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-secondary" type="submit" id="boton_enviar">Generar PDF</button>
+                            <button class="btn btn-secondary" type="button" id="boton_limpiar">Limpiar</button>
+                        </div>
+                    </div>
+                </form>
+                {% else %}
+                <div class="alert alert-warning text-center mt-3">
+                    No se han buscado datos.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/lista_honorario/listado_honorario.js' %}"></script>
+{% endblock %}

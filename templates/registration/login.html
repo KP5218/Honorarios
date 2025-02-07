@@ -1,0 +1,57 @@
+{% extends "global/layout.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid bg-light d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-8 col-lg-6 col-xl-4">
+            <div class="card shadow-lg rounded-4 border-0 p-4" style="margin-top: -20%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+                <section id="loginForm">
+                    <div class="container-fluid py-3">
+                        <div class="row d-flex justify-content-center align-items-center">
+                            <div class="col-8">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+
+                                    <div class="text-center mb-4">
+                                        <h4 class="fw-bold text-dark">Inicia sesión</h4>
+                                        <hr class="w-50 mx-auto bg-primary" />
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label for="username" class="form-label text-dark">Usuario</label>
+                                        <input type="text" name="username" id="username" class="form-control form-control-lg"
+                                               placeholder="Ingresa tu usuario" autofocus autocomplete="username" maxlength="150" required>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label for="password" class="form-label text-dark">Contraseña</label>
+                                        <input type="password" name="password" id="password" class="form-control form-control-lg"
+                                               placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
+                                    </div>
+
+                                    <div class="text-center text-lg-start mt-4 pt-1">
+                                        <button type="submit" class="btn btn-primary btn-lg px-4 w-100 shadow-sm">
+                                            Entrar
+                                        </button>
+                                    </div>
+
+                                    {% if form.errors %}
+                                        <div class="alert alert-danger mt-3" role="alert">
+                                            <strong>Error:</strong> Ingresa un usuario o contraseña válida.
+                                        </div>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

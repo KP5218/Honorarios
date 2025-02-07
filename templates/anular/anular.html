@@ -1,0 +1,69 @@
+{% extends 'global/layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid bg-light d-flex justify-content-center align-items-center" style="min-height: 80vh; margin-top:-80px;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-6">
+            <div class="card shadow-lg rounded-4 border-0 p-3 w-100">
+                <div class="card-header bg-secondary text-white text-center py-2 rounded-4">
+                    <h4 class="card-title m-0 fw-bold">Deshabilitar correo</h4>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}
+                            alert-dismissible fade show position-fixed top-0 end-0 mt-3 me-3 shadow-lg"
+                            style="width: 350px; z-index: 1050;" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST" id="form3" class="form-horizontal" action="{% url 'anulado' %}">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group row mb-3">
+                            <label for="rut" class="col-sm-4 col-form-label fw-bold fs-6">Ingrese RUT:</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                    <input type="text" name="rut" id="rut" class="form-control fs-6" placeholder="Ejemplo: 11111111-1" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <aside class="row">
+                            <div class="col-md-12">
+                                <div id="results" class="table-responsive mt-2" style="max-height: 250px; overflow-auto;">
+                                    <table class="table table-bordered table-striped table-hover table-sm">
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <div class="form-group row mb-3">
+                            <label for="motivoAnulacion" class="col-sm-4 col-form-label fw-bold fs-6">Motivo de Anulación:</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="motivo_anulacion" id="motivoAnulacion" class="form-control fs-6" pattern="[A-Za-z\s]+" required>
+                                <small id="error-mensaje" class="text-danger"></small>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-secondary fw-bold py-2 px-4 fs-6" style="width: 60%;">Confirmar Anulación</button>
+                            <input type="hidden" id="correosSeleccionadosInput" name="correosSeleccionados">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="{% static 'js/anular/anular.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="es">
+
+<head>
+    <title>{% block title %} PROYECTO HONORARIOS {% endblock %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .navbar-nav .nav-link {
+            position: relative;
+            transition: all 0.3s ease-in-out;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .navbar-nav .nav-link.active {
+            background: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 3px;
+            background: #f8f9fa;
+            transition: width 0.3s ease-in-out;
+            margin: auto;
+            border-radius: 2px;
+        }
+
+        .navbar-nav .nav-link.active::after,
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .navbar-collapse {
+            transition: all 0.4s ease-in-out;
+        }
+
+        .navbar-toggler {
+            border: none;
+            outline: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+
+<body class="bg-dark">
+
+    {% block header %}
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <span class="text-white font-weight-bold">PROYECTO HONORARIOS</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    {% if user.is_authenticated %}
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item {% if request.path == '/carga_datos/' %}active{% endif %}">
+                            <a class="nav-link text-white {% if request.path == '/carga_datos/' %}active{% endif %}" href="/carga_datos/">Carga de datos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-bold {% if request.path == '/form_correo/' %}active{% endif %}" href="/form_correo/">Crear correo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-bold {% if request.path == '/lista_honorarios/' %}active{% endif %}" href="/lista_honorarios/">Lista honorarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-bold {% if request.path == '/carga_correo_masivo/' %}active{% endif %}" href="/carga_correo_masivo/">Carga de correos masivo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-bold {% if request.path == '/anular/' %}active{% endif %}" href="/anular/">Correos</a>
+                        </li>
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <div class="ms-3">
+                    {% include 'app/loginpartial.html' %}
+                </div>
+            </div>
+        </nav>
+    </header>
+    {% endblock %}
+
+    {% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="display-4 text-white fw-bold mb-3">Bienvenido</h1>
+                <p class="lead text-white">Gestiona tus datos médicos de manera sencilla y eficiente.</p>
+            </div>
+        </div>
+        {% block inner_content %}
+        {% endblock %}
+    </div>
+    {% endblock %}
+
+    {% block footer %}
+    {% include 'global/inferior.html' %}
+    {% endblock %}
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+</html>

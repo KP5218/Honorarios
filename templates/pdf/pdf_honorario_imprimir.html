@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF - Liquidación de Prestaciones</title>
+    <style>
+        body {
+            font-size: 12px;
+            font-family: Calibri, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .header-table td {
+            border: none;
+            vertical-align: top;
+        }
+        .summary-box {
+            border: 2px solid black;
+            width: 30%;
+            padding: 10px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .subtitle {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <table class="header-table">
+            <tr>
+                <td style="width: 40%; font-weight: bold;">
+                    <p>Liquidación</p>
+                    <p>Rut: 11.111.111-1</p>
+                    <p>Dirección: xxx</p>
+                </td>
+                <td class="text-center title" style="width: 20%;">Liquidación Prestaciones</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="box">
+        <table>
+            <tr>
+                <td style="width: 15%; font-weight: bold;">Nombre:</td>
+                <td style="width: 50%;">{{ nombre }}</td>
+                <td class="title">LIQUIDACIÓN {{ periodo.periodo }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">Rut:</td>
+                <td>{{ rut }}</td>
+                <td class="title">DESDE {{ fecha_periodo_desde }} AL {{ fecha_periodo_hasta }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="subtitle">Detalle de Prestaciones:</div>
+    <div class="text-center">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">FECHA</th>
+                    <th style="width: 25%;">N° BONO/OP</th>
+                    <th style="width: 30%;">NOMBRE PACIENTE</th>
+                    <th style="width: 20%;">$M.BRUTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in datos %}
+                <tr>
+                    <td>{{ data.fecha_creacion }}</td>
+                    <td>{{ data.op }}</td>
+                    <td>{{ data.nombre_paciente }}</td>
+                    <td>{{ data.valor }}</td>
+                </tr>
+                {% endfor %}
+                <tr style="font-weight: bold;">
+                    <td>Totales</td>
+                    <td colspan="2"></td>
+                    <td>{{ resultado_total_liquidar_formato }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="summary-box">
+        <p>Resumen
+         <br>
+            Monto Bruto: ${{ resultado_total_liquidar_formato }}</p>
+    </div>
+
+    <div>
+        <p class="subtitle">Para cualquier consulta, favor contactarse con RRHH al correo: <strong>oficina@gmail.com</strong></p>
+        <p class="subtitle">ENVIAR FACTURA O BOLETA AL CORREO: <strong>correa.kro@gmail.com</strong></p>
+    </div>
+</body>
+</html>

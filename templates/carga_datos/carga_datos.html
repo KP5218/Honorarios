@@ -1,0 +1,109 @@
+{% extends 'global/layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid bg-light d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-12 col-lg-10 col-xl-8">
+            <div class="card shadow-lg rounded-4 border-0 p-5 w-100">
+                <div class="card-header bg-secondary text-white text-center py-3 rounded-4">
+                    <h4 class="card-title m-0">Carga y Envío de Datos</h4>
+                </div>
+
+                <form id="formulario_datos" method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label for="select_periodo" class="form-label fw-bold text-dark">Periodo Liquidación</label>
+                            <select class="form-select" id="select_periodo" name="select_periodo" required>
+                                <option value="" selected disabled>Seleccione periodo</option>
+                                {% for periodo in periodo_bd %}
+                                    <option value="{{ periodo.cod_periodo }}">{{ periodo.periodo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <label for="fecha_desde" class="form-label fw-bold text-dark">Desde</label>
+                                <input name="fecha_desde" id="fecha_desde" class="form-control" type="date" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="fecha_hasta" class="form-label fw-bold text-dark">Hasta</label>
+                                <input name="fecha_hasta" id="fecha_hasta" class="form-control" type="date" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="csv_file" class="form-label fw-bold text-dark">Seleccione el archivo a cargar...</label>
+                            <input class="form-control" type="file" name="csv_file" id="csv_file" accept=".csv, .xlsx, .xls" required>
+                        </div>
+                        <div class="text-end">
+                            {% if mostrar_boton %}
+                                <button type="submit" id="submit_button" class="btn btn-secondary">Guardar</button>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if messages %}
+                        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </form>
+
+                <form id="formulario" method="post" action="{% url 'busqueda_datos' %}" onsubmit="return validarCheckbox()">
+                    {% csrf_token %}
+                    {% if datos_visualizacion %}
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="seleccionarTodo">
+                                    <label class="form-check-label" for="seleccionarTodo">Seleccionar todo...</label>
+                                </div>
+                                <div style="max-height: 300px; overflow-y: auto;">
+                                    <table class="table table-striped mt-2">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>RUT</th>
+                                                <th>Nombre</th>
+                                                <th>Valor Total</th>
+                                                <th>Descuento Total</th>
+                                                <th>Total a Liquidar</th>
+                                                <th>Seleccionar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for registro in datos_visualizacion %}
+                                            <tr>
+                                                <td>{{ registro.rut }}</td>
+                                                <td>{{ registro.nombre }}</td>
+                                                <td>{{ registro.Valor_total }}</td>
+                                                <td>{{ registro.Descuento_total }}</td>
+                                                <td>{{ registro.Total_liquidar }}</td>
+                                                <td><input type="checkbox" name="registro_seleccionado" value="{{ registro.rut }},{{ registro.id_transaccion }}"></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group text-end mt-4">
+                                <button class="btn btn-primary" type="submit" id="boton_enviar">Enviar</button>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning mt-3 text-center">
+                            No se han cargado datos.
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/carga_datos/carga_datos.js' %}"></script>
+{% endblock %}
